@@ -25,7 +25,7 @@
 html,
 body {
     background-color: var(--primary);
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
