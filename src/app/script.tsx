@@ -8,6 +8,7 @@ import {
     GITHUB_METADATA_REPOS_PATH,
     REPO_NAME_TO_APP_NAME,
 } from "./lib/constants";
+import { GithubRepo } from "./lib/types/githubRepo";
 
 const languageColors = yaml.load(
     await fetch(

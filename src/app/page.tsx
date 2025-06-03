@@ -2,6 +2,7 @@
 
 import { JSX, useEffect, useState } from "react";
 import { GITHUB_REPOS, GITHUB_USERNAME } from "./lib/constants";
+import { GithubRepo } from "./lib/types/githubRepo";
 import {
     renderRepoElements,
     retrieveGithubRepoLanguages,

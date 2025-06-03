@@ -1,4 +1,4 @@
-type GithubRepo = {
+export type GithubRepo = {
     name: string;
     html_url: string;
     languages_url: string;
