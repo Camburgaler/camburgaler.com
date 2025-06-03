@@ -1,4 +1,77 @@
+"use client";
+
+import { JSX, useEffect, useState } from "react";
+import { GITHUB_REPOS, GITHUB_USERNAME } from "./lib/constants";
+import {
+    renderRepoElements,
+    retrieveGithubRepoLanguages,
+    retrieveGithubRepoMetadata,
+} from "./script";
+
 export default function Home() {
+    const age = Math.floor(
+        new Date().getTime() / 1000 / 60 / 60 / 24 / 365 -
+            new Date(1999, 0, 9, 0, 0, 0, 0).getTime() /
+                1000 /
+                60 /
+                60 /
+                24 /
+                365
+    );
+    const [repoMetadata, setRepoMetadata] = useState<
+        Record<string, GithubRepo>
+    >({});
+    const [repoLanguages, setRepoLanguages] = useState<
+        Record<string, Record<string, number>>
+    >({});
+    const [repoElements, setRepoElements] = useState<JSX.Element[]>(
+        GITHUB_REPOS.map((repo) =>
+            renderRepoElements(repo, repoMetadata[repo], repoLanguages[repo])
+        )
+    );
+
+    useEffect(() => {
+        async function fetchGithubData() {
+            const metadata: Record<string, GithubRepo> = {};
+            const languages: Record<string, Record<string, number>> = {};
+            const repoElements: JSX.Element[] = [];
+
+            for (const repo of GITHUB_REPOS) {
+                try {
+                    metadata[repo] = await retrieveGithubRepoMetadata(
+                        GITHUB_USERNAME,
+                        repo
+                    );
+                    languages[repo] = await retrieveGithubRepoLanguages(
+                        GITHUB_USERNAME,
+                        repo
+                    );
+                } catch (e) {
+                    console.error(`Failed ot fetch data for ${repo}:`, e);
+                }
+
+                repoElements.push(
+                    renderRepoElements(repo, metadata[repo], languages[repo])
+                );
+            }
+
+            setRepoMetadata(metadata);
+            setRepoLanguages(languages);
+            setRepoElements(
+                repoElements.sort((a, b) => {
+                    const aMeta = metadata[a.key as string];
+                    const bMeta = metadata[b.key as string];
+                    return (
+                        new Date(bMeta.updated_at).getTime() -
+                        new Date(aMeta.updated_at).getTime()
+                    );
+                })
+            );
+        }
+
+        fetchGithubData();
+    }, []);
+
     return (
         <div className="container">
             <header className="row center">
@@ -15,19 +88,43 @@ export default function Home() {
                         software engineer at USAA. I grew up in Corpus Christi,
                         Texas and graduated from Texas A&M University - Corpus
                         Christi with a Bachelor of Science in Computer Science.
-                        I currently live in Bryan, Texas. I am 25 years old. My
-                        wife, Mary, and my daughters, Amelia and Briar, are my
-                        inspiration. My corgi, Gidget, has kept me company since
-                        2019. In my free time, I read and I play Dungeons &
-                        Dragons or JRPGs. I attend rennaissance faires. I learn
-                        best through examples and hands-on experience. If you'd
-                        like to chat, please email me.
+                        I currently live in Bryan, Texas. I am {age} years old.
+                        My wife, Mary, and my daughters, Amelia and Briar, are
+                        my inspiration. My corgi, Gidget, has kept me company
+                        since 2019. In my scant free time, I work on personal
+                        coding projects, play video games, and play Tabletop
+                        Roleplaying Games (e.g. Dungeons & Dragons). I learn
+                        best through examples and hands-on experience. If
+                        you&apos;d like to chat, please email me.
                     </p>
                     <h2>Projects</h2>
+                    {repoElements}
+                    <h3>
+                        <a href="https://scoundrel.camburgaler.com">
+                            Scoundrel Card Game
+                        </a>{" "}
+                        (
+                        <a href="https://github.com/Camburgaler/scoundrel">
+                            source
+                        </a>
+                        )
+                    </h3>
+                    <p>
+                        This is a roguelike dungeon-crawler card game called
+                        Scoundrel. It is written in Svelte and TypeScript. With
+                        this project, I was specifically trying to broaden my
+                        experience by using tools I was unfamiliar with. I chose
+                        Svelte for this reason, as well as Svelte being useful
+                        for easily animating the UI. Additionally, I got some
+                        experience storing and serving static assets, by writing
+                        asset metadata to a database, retrieving the metadata at
+                        runtime, then using that metadata to determine what
+                        assets are needed and from where to retrieve them.
+                    </p>
                     <h3>
                         <a href="https://haligtree.camburgaler.com">
                             Haligtree Planner
-                        </a>
+                        </a>{" "}
                         (
                         <a href="https://github.com/Camburgaler/haligtree">
                             source
@@ -45,9 +142,13 @@ export default function Home() {
                         optimal starting class for your build. The armor
                         optimizer displays the three best armor sets within your
                         equip load budget, and does so with an efficient
-                        knapsack algorithm. The weapon finder displays every
-                        weapon that you can hold and ranks them based on damage
-                        output. There are more plans for this app in the future.
+                        knapsack algorithm. The weapon finder allows you to
+                        filter weapons and ranks them based on damage output. To
+                        see my future plans for this app, please see the{" "}
+                        <a href="https://github.com/Camburgaler/haligtree/issues">
+                            Github issues
+                        </a>{" "}
+                        page.
                     </p>
                     <h3>
                         Dark Souls TTRPG Character Sheet (WIP) (
@@ -75,11 +176,11 @@ export default function Home() {
                         <a href="https://en.wikipedia.org/wiki/Latin_hypercube_sampling#cite_note-C3M-1">
                             Wikipedia article on latin hypercube sampling
                         </a>
-                        : "Latin hypercube sampling (LHS) is a statistical
+                        : &quot;Latin hypercube sampling (LHS) is a statistical
                         method for generating a near-random sample of parameter
                         values from a multidimensional distribution. The
                         sampling method is often used to construct computer
-                        experiments or for Monte Carlo integration." This
+                        experiments or for Monte Carlo integration. &quot; This
                         project was written during a summer internship that I
                         did for TechSource, Inc., an LANL-adjacent company in
                         Los Alamos, New Mexico. I needed to better understand
@@ -96,7 +197,7 @@ export default function Home() {
                     <p>
                         This project was made as the final assignment for my
                         Systems Programming class during my Fall 2020 semester.
-                        It's a program that accepts a binary message and
+                        It&apos;s a program that accepts a binary message and
                         simulates sending the individual bytes over a network by
                         sending the bytes across 3 unique processes, sending
                         confirmation of receipt messages, and printing the
