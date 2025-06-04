@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import yaml from "js-yaml";
+import { remark } from "remark";
+import html from "remark-html";
+import MarkdownRenderer from "./lib/components/MarkdownRenderer";
 import {
     GITHUB_METADATA_HOST,
     GITHUB_METADATA_LANGUAGES_PATH,
@@ -9,6 +12,11 @@ import {
     REPO_NAME_TO_APP_NAME,
 } from "./lib/constants";
 import { CombinedMetadata } from "./lib/types/combinedMetadata";
+
+export async function markdownToHtml(markdown: string) {
+    const result = await remark().use(html).process(markdown);
+    return result;
+}
 
 const languageColors = yaml.load(
     await fetch(
@@ -59,7 +67,7 @@ function renderRepoTitle(repoMetadata: CombinedMetadata, repoName: string) {
                     {getAppName(repoMetadata, repoName)}
                 </a>
             ) : (
-                getAppName(repoMetadata, repoName)
+                getAppName(repoMetadata, repoName) + " (WIP)"
             )}{" "}
             (<a href={repoMetadata.html_url}>source</a>)
         </h3>
@@ -115,8 +123,8 @@ function renderRepoLanguages(repoLanguages: Record<string, number>) {
 }
 
 function renderRepoDescription(repoMetadata: CombinedMetadata) {
-    return repoMetadata ? (
-        <p>{repoMetadata.description}</p>
+    return repoMetadata && repoMetadata.description ? (
+        <MarkdownRenderer content={repoMetadata.description} />
     ) : (
         <p>(description loading...)</p>
     );
