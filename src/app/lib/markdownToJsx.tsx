@@ -8,9 +8,7 @@ import { unified } from "unified";
 
 // Optional: Customize components
 const components: Record<string, React.ElementType> = {
-    a: (props: any) => (
-        <a {...props} target="_blank" rel="noopener noreferrer" />
-    ),
+    a: (props) => <a {...props} target="_blank" rel="noopener noreferrer" />,
 };
 
 export function markdownToJsx(markdown: string): JSX.Element {
