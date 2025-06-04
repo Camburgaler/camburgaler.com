@@ -16,7 +16,7 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <link
-                    href="https://fonts.googleapis.com/css?family=Montserrat"
+                    href="https://fonts.googleapis.com/css?family=Montserrat&display=optional"
                     rel="stylesheet"
                 />
             </head>

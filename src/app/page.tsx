@@ -2,11 +2,11 @@
 
 import { JSX, useEffect, useState } from "react";
 import { GITHUB_REPOS, GITHUB_USERNAME } from "./lib/constants";
-import { GithubRepo } from "./lib/types/githubRepo";
+import { CombinedMetadata } from "./lib/types/combinedMetadata";
 import {
     renderRepoElements,
     retrieveGithubRepoLanguages,
-    retrieveGithubRepoMetadata,
+    retrieveMetadata,
 } from "./script";
 
 export default function Home() {
@@ -19,36 +19,33 @@ export default function Home() {
                 24 /
                 365
     );
-    const [repoMetadata, setRepoMetadata] = useState<
-        Record<string, GithubRepo>
-    >({});
+    const [metadata, setMetadata] = useState<Record<string, CombinedMetadata>>(
+        {}
+    );
     const [repoLanguages, setRepoLanguages] = useState<
         Record<string, Record<string, number>>
     >({});
     const [repoElements, setRepoElements] = useState<JSX.Element[]>(
         GITHUB_REPOS.map((repo) =>
-            renderRepoElements(repo, repoMetadata[repo], repoLanguages[repo])
+            renderRepoElements(repo, metadata[repo], repoLanguages[repo])
         )
     );
 
     useEffect(() => {
         async function fetchGithubData() {
-            const metadata: Record<string, GithubRepo> = {};
+            const metadata: Record<string, CombinedMetadata> = {};
             const languages: Record<string, Record<string, number>> = {};
             const repoElements: JSX.Element[] = [];
 
             for (const repo of GITHUB_REPOS) {
                 try {
-                    metadata[repo] = await retrieveGithubRepoMetadata(
-                        GITHUB_USERNAME,
-                        repo
-                    );
+                    metadata[repo] = await retrieveMetadata(repo);
                     languages[repo] = await retrieveGithubRepoLanguages(
                         GITHUB_USERNAME,
                         repo
                     );
                 } catch (e) {
-                    console.error(`Failed ot fetch data for ${repo}:`, e);
+                    console.error(`Failed to fetch data for ${repo}:`, e);
                 }
 
                 repoElements.push(
@@ -56,7 +53,7 @@ export default function Home() {
                 );
             }
 
-            setRepoMetadata(metadata);
+            setMetadata(metadata);
             setRepoLanguages(languages);
             setRepoElements(
                 repoElements.sort((a, b) => {

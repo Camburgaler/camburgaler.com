@@ -8,7 +8,7 @@ import {
     GITHUB_METADATA_REPOS_PATH,
     REPO_NAME_TO_APP_NAME,
 } from "./lib/constants";
-import { GithubRepo } from "./lib/types/githubRepo";
+import { CombinedMetadata } from "./lib/types/combinedMetadata";
 
 const languageColors = yaml.load(
     await fetch(
@@ -16,7 +16,7 @@ const languageColors = yaml.load(
     ).then((res) => res.text())
 ) as Record<string, { color: string }>;
 
-async function retrieveGithubMetadata<T>(url: string): Promise<T> {
+async function fetchGithubMetadata<T>(url: string): Promise<T> {
     const res = await fetch(
         `${GITHUB_METADATA_HOST}${url}`,
         process.env.NEXT_PUBLIC_GITHUB_PAT
@@ -30,56 +30,47 @@ async function retrieveGithubMetadata<T>(url: string): Promise<T> {
     return res.json();
 }
 
-export function retrieveGithubRepoMetadata(
-    user: string,
-    repo: string
-): Promise<GithubRepo> {
-    return retrieveGithubMetadata<GithubRepo>(
-        `${GITHUB_METADATA_REPOS_PATH}/${user}/${repo}`
-    );
+async function fetchMetadata(repo: string): Promise<CombinedMetadata> {
+    const res = await fetch(`/api/metadata?repo=${repo}`);
+    return res.json();
+}
+
+export function retrieveMetadata(repo: string): Promise<CombinedMetadata> {
+    return fetchMetadata(repo);
 }
 
 export function retrieveGithubRepoLanguages(
     user: string,
     repo: string
 ): Promise<Record<string, number>> {
-    return retrieveGithubMetadata<Record<string, number>>(
+    return fetchGithubMetadata<Record<string, number>>(
         `${GITHUB_METADATA_REPOS_PATH}/${user}/${repo}${GITHUB_METADATA_LANGUAGES_PATH}`
     );
 }
+function getAppName(metadata: CombinedMetadata, repoName: string) {
+    return metadata.app_name ?? REPO_NAME_TO_APP_NAME.get(repoName);
+}
 
-export function renderRepoElements(
-    repoName: string,
-    repoMetadata: GithubRepo,
-    repoLanguages: Record<string, number>
-) {
-    return (
-        <div key={repoName}>
-            {" "}
-            {repoMetadata ? (
-                <h3>
-                    {repoMetadata.homepage ? (
-                        <a href={repoMetadata.homepage}>
-                            {REPO_NAME_TO_APP_NAME.get(repoName)}
-                        </a>
-                    ) : (
-                        REPO_NAME_TO_APP_NAME.get(repoName)
-                    )}{" "}
-                    (<a href={repoMetadata.html_url}>source</a>)
-                </h3>
+function renderRepoTitle(repoMetadata: CombinedMetadata, repoName: string) {
+    return repoMetadata ? (
+        <h3>
+            {repoMetadata.homepage ? (
+                <a href={repoMetadata.homepage}>
+                    {getAppName(repoMetadata, repoName)}
+                </a>
             ) : (
-                <h3 key={repoName}>
-                    {REPO_NAME_TO_APP_NAME.get(repoName)} (loading...)
-                </h3>
-            )}
-            {repoLanguages && languageColors
-                ? renderLanguageSpans(repoLanguages)
-                : `(languages loading...)`}
-        </div>
+                getAppName(repoMetadata, repoName)
+            )}{" "}
+            (<a href={repoMetadata.html_url}>source</a>)
+        </h3>
+    ) : (
+        <h3 key={repoName}>
+            {REPO_NAME_TO_APP_NAME.get(repoName)} (loading...)
+        </h3>
     );
 }
 
-export function renderLanguageSpans(repoLanguages: Record<string, number>) {
+function renderLanguageSpans(repoLanguages: Record<string, number>) {
     return (
         <span style={{ width: "100%", display: "flex", height: "10px" }}>
             {Object.entries(repoLanguages)
@@ -114,5 +105,33 @@ export function renderLanguageSpans(repoLanguages: Record<string, number>) {
                     ></span>
                 ))}
         </span>
+    );
+}
+
+function renderRepoLanguages(repoLanguages: Record<string, number>) {
+    return repoLanguages && languageColors
+        ? renderLanguageSpans(repoLanguages)
+        : `(languages loading...)`;
+}
+
+function renderRepoDescription(repoMetadata: CombinedMetadata) {
+    return repoMetadata ? (
+        <p>{repoMetadata.description}</p>
+    ) : (
+        <p>(description loading...)</p>
+    );
+}
+
+export function renderRepoElements(
+    repoName: string,
+    repoMetadata: CombinedMetadata,
+    repoLanguages: Record<string, number>
+) {
+    return (
+        <div key={repoName}>
+            {renderRepoTitle(repoMetadata, repoName)}
+            {renderRepoLanguages(repoLanguages)}
+            {renderRepoDescription(repoMetadata)}
+        </div>
     );
 }
