@@ -72,19 +72,6 @@ function renderRepoTitle(repoMetadata: CombinedMetadata, repoName: string) {
     );
 }
 
-function getContrastingTextColor(bgColor: string) {
-    // bgColor must be in hex format: "#RRGGBB"
-    const r = parseInt(bgColor.slice(1, 3), 16);
-    const g = parseInt(bgColor.slice(3, 5), 16);
-    const b = parseInt(bgColor.slice(5, 7), 16);
-
-    // Calculate the relative luminance
-    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-
-    // Use white text for dark backgrounds, black text for light backgrounds
-    return luminance > 186 ? "#000000" : "#FFFFFF";
-}
-
 function renderRepoDescription(repoMetadata: CombinedMetadata) {
     return repoMetadata && repoMetadata.description ? (
         <MarkdownRenderer content={repoMetadata.description} />

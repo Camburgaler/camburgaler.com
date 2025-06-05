@@ -13,7 +13,7 @@ export default function LanguagesDisplay(props: {
 }) {
     const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null);
 
-    function renderLanguageSpans(repoLanguages: Record<string, number>) {
+    function renderLanguageSpans() {
         return (
             <div style={{ width: "100%", display: "flex", height: "20px" }}>
                 {Object.entries(props.repoLanguages)
@@ -66,6 +66,6 @@ export default function LanguagesDisplay(props: {
     }
 
     return props.repoLanguages && languageColors
-        ? renderLanguageSpans(props.repoLanguages)
+        ? renderLanguageSpans()
         : `(languages loading...)`;
 }
