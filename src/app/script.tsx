@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import yaml from "js-yaml";
 import { remark } from "remark";
 import html from "remark-html";
+import LanguagesDisplay from "./lib/components/LanguagesDisplay";
 import MarkdownRenderer from "./lib/components/MarkdownRenderer";
 import {
     GITHUB_METADATA_HOST,
@@ -17,12 +17,6 @@ export async function markdownToHtml(markdown: string) {
     const result = await remark().use(html).process(markdown);
     return result;
 }
-
-const languageColors = yaml.load(
-    await fetch(
-        "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml"
-    ).then((res) => res.text())
-) as Record<string, { color: string }>;
 
 async function fetchGithubMetadata<T>(url: string): Promise<T> {
     const res = await fetch(
@@ -78,48 +72,17 @@ function renderRepoTitle(repoMetadata: CombinedMetadata, repoName: string) {
     );
 }
 
-function renderLanguageSpans(repoLanguages: Record<string, number>) {
-    return (
-        <span style={{ width: "100%", display: "flex", height: "10px" }}>
-            {Object.entries(repoLanguages)
-                .sort((a, b) => b[1] - a[1])
-                .map(([lang, count]) => (
-                    <span
-                        key={lang}
-                        style={{
-                            backgroundColor: languageColors[lang].color,
-                            width: `${
-                                (count /
-                                    Object.values(repoLanguages).reduce(
-                                        (a, b) => a + b,
-                                        0
-                                    )) *
-                                100
-                            }%`,
-                            borderRadius: "10px",
-                            height: "auto",
-                            fontSize: "1rem",
-                            transition: "all 0.5s ease-in-out",
-                            color: "var(--font)",
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.textContent = `${lang}: ${count}`;
-                            e.currentTarget.style.height = "1.5rem";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.textContent = "";
-                            e.currentTarget.style.height = "auto";
-                        }}
-                    ></span>
-                ))}
-        </span>
-    );
-}
+function getContrastingTextColor(bgColor: string) {
+    // bgColor must be in hex format: "#RRGGBB"
+    const r = parseInt(bgColor.slice(1, 3), 16);
+    const g = parseInt(bgColor.slice(3, 5), 16);
+    const b = parseInt(bgColor.slice(5, 7), 16);
 
-function renderRepoLanguages(repoLanguages: Record<string, number>) {
-    return repoLanguages && languageColors
-        ? renderLanguageSpans(repoLanguages)
-        : `(languages loading...)`;
+    // Calculate the relative luminance
+    const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+
+    // Use white text for dark backgrounds, black text for light backgrounds
+    return luminance > 186 ? "#000000" : "#FFFFFF";
 }
 
 function renderRepoDescription(repoMetadata: CombinedMetadata) {
@@ -138,7 +101,7 @@ export function renderRepoElements(
     return (
         <div key={repoName}>
             {renderRepoTitle(repoMetadata, repoName)}
-            {renderRepoLanguages(repoLanguages)}
+            <LanguagesDisplay repoLanguages={repoLanguages} />
             {renderRepoDescription(repoMetadata)}
         </div>
     );
