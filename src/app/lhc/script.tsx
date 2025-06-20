@@ -12,14 +12,14 @@ export function updateNumber(
     customizeBaseScale: boolean,
     customizeScales: boolean
 ): void {
-    let newBaseScale = {
-        lower: customizeBaseScale ? args.base_scale?.lower! : 0,
-        upper: customizeBaseScale ? args.base_scale?.upper! : Number(newNum),
+    const newBaseScale = {
+        lower: customizeBaseScale ? args.base_scale.lower : 0,
+        upper: customizeBaseScale ? args.base_scale.upper : Number(newNum),
     };
 
     let newScales: Record<number, LhcScale> = {};
     if (customizeScales) {
-        newScales = args.scales!;
+        newScales = args.scales;
     } else {
         for (let i = 0; i < args.dimensions; i++) {
             newScales[i] = {
@@ -64,7 +64,7 @@ export function updateBaseScale(
 ) {
     let newScales: Record<number, LhcScale> = {};
     if (customizeScales) {
-        newScales = args.scales!;
+        newScales = args.scales;
     } else {
         for (let i = 0; i < args.dimensions; i++) {
             newScales[i] = {
@@ -95,14 +95,14 @@ export function updateScale(
     let upper = newUpper;
 
     if (newLower > newUpper) {
-        if (newLower != args.scales![i].lower) {
+        if (newLower != args.scales[i].lower) {
             upper = newLower;
         } else {
             lower = newUpper;
         }
     }
 
-    let newScales = args.scales!;
+    const newScales = args.scales;
     newScales[i] = {
         lower: lower,
         upper: upper,
@@ -130,7 +130,7 @@ export function updateColumnHeadings(
     newHeading: string,
     setArgs: Dispatch<SetStateAction<LhcArgs>>
 ) {
-    let newHeadings = args.column_headings!;
+    const newHeadings = args.column_headings;
     newHeadings[i] = newHeading;
 
     setArgs({
@@ -187,7 +187,7 @@ export function toggleDefaultDimensionHeadings(
     args: LhcArgs
 ) {
     if (checked) {
-        let newHeadings: string[] = [];
+        const newHeadings: string[] = [];
         for (let i = 0; i < args.dimensions; i++) {
             newHeadings[i] = DEFAULT_DIMENSION_PREFIX + i;
         }
@@ -206,7 +206,7 @@ export function updateDimensions(
     value: number
 ) {
     let newColumnHeadings = args.column_headings!;
-    let newRandom = args.random!;
+    let newRandom = args.random;
     let newScales: Record<number, LhcScale> = {};
 
     if (value < newColumnHeadings.length) {
@@ -222,7 +222,7 @@ export function updateDimensions(
     } else {
         for (let i = newColumnHeadings.length; i < value; i++) {
             newColumnHeadings.push(DEFAULT_DIMENSION_PREFIX + i);
-            newScales = args.scales!;
+            newScales = args.scales;
             newScales[i] = {
                 lower: args.base_scale?.lower ?? 0,
                 upper: args.base_scale?.upper ?? args.number,
@@ -248,11 +248,11 @@ export function toggleCustomizeScales(
     setCustomizeScales(!checked);
 
     if (checked) {
-        let newScales: Record<number, LhcScale> = {};
+        const newScales: Record<number, LhcScale> = {};
         for (let i = 0; i < args.dimensions; i++) {
             newScales[i] = {
-                lower: args.base_scale?.lower ?? 0,
-                upper: args.base_scale?.upper ?? args.number,
+                lower: args.base_scale.lower ?? 0,
+                upper: args.base_scale.upper ?? args.number,
             };
         }
         setArgs({ ...args, scales: newScales });
