@@ -9,17 +9,31 @@ export function updateNumber(
     setArgs: Dispatch<SetStateAction<LhcArgs>>,
     newNum: number,
     args: LhcArgs,
-    customizeBaseScale: boolean
+    customizeBaseScale: boolean,
+    customizeScales: boolean
 ): void {
+    let newBaseScale = {
+        lower: customizeBaseScale ? args.base_scale?.lower! : 0,
+        upper: customizeBaseScale ? args.base_scale?.upper! : Number(newNum),
+    };
+
+    let newScales: Record<number, LhcScale> = {};
+    if (customizeScales) {
+        newScales = args.scales!;
+    } else {
+        for (let i = 0; i < args.dimensions; i++) {
+            newScales[i] = {
+                lower: newBaseScale.lower,
+                upper: newBaseScale.upper,
+            };
+        }
+    }
+
     setArgs({
         ...args,
         number: Number(newNum),
-        base_scale: {
-            lower: customizeBaseScale ? args.base_scale?.lower! : 0,
-            upper: customizeBaseScale
-                ? args.base_scale?.upper!
-                : Number(newNum),
-        },
+        base_scale: newBaseScale,
+        scales: newScales,
     });
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { JSX, useState } from "react";
 import { LhcScaleInput } from "../lib/components/lhc/LhcScaleInput";
 import { LhcArgs } from "../lib/types/lhcArgs";
@@ -49,7 +50,7 @@ export default function LHC(): JSX.Element {
                 <h1>Latin Hypercube Generator (version {lhcVersionDisplay})</h1>
             </header>
             <h2>
-                <a href="/">Home</a>
+                <Link href="/">Home</Link>
             </h2>
             <hr />
             <main>
@@ -71,7 +72,8 @@ export default function LHC(): JSX.Element {
                                         setArgs,
                                         Number(e.target.value),
                                         args,
-                                        customizeBaseScale
+                                        customizeBaseScale,
+                                        customizeScales
                                     );
                                 }}
                             />
@@ -174,7 +176,7 @@ export default function LHC(): JSX.Element {
                                         )
                                     </th>
                                     <th>
-                                        Random (All?{" "}
+                                        Slightly Randomize Values (All?{" "}
                                         <input
                                             type="checkbox"
                                             name="random"
@@ -192,7 +194,7 @@ export default function LHC(): JSX.Element {
                                         )
                                     </th>
                                     <th>
-                                        Scale (Base Scale?{" "}
+                                        Scale Override (Base Scale for All?{" "}
                                         <input
                                             type="checkbox"
                                             checked={!customizeScales}
@@ -271,7 +273,7 @@ export default function LHC(): JSX.Element {
                                                 requiredCondition={
                                                     customizeScales
                                                 }
-                                                value={args.scales?.[i]!}
+                                                value={args.scales?.[i]}
                                                 onChange={{
                                                     lower: (e) => {
                                                         updateScale(
@@ -279,7 +281,7 @@ export default function LHC(): JSX.Element {
                                                                 e.target.value
                                                             ),
                                                             args.scales?.[i]
-                                                                ?.upper!,
+                                                                .upper,
                                                             i,
                                                             setArgs,
                                                             args
@@ -288,7 +290,7 @@ export default function LHC(): JSX.Element {
                                                     upper: (e) => {
                                                         updateScale(
                                                             args.scales?.[i]
-                                                                ?.lower!,
+                                                                .lower,
                                                             Number(
                                                                 e.target.value
                                                             ),

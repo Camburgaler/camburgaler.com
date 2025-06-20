@@ -8,14 +8,14 @@ export type LhcArgs = {
     //   -r, --random arg           Optional. Select randomness: 'false' = none,
     //                              'true' = all, or a comma-separated list of
     //                              dimension indices (default: false)
-    random?: "true" | "false" | number[];
+    random: "true" | "false" | number[];
     //  -b, --base-scale arg       Optional. Default scale for all dimensions in
     //                             the form lower:upper (default: 0:1)
-    base_scale?: LhcScale;
+    base_scale: LhcScale;
     //  -s, --scales arg           Optional. Comma-separated
     //                             dimension:lower:upper overrides
-    scales?: Record<number, LhcScale>;
+    scales: Record<number, LhcScale>;
     //  -c, --column-headings arg  Optional. Column names for CSV output (only
     //                             alphanumeric and underscore characters)
-    column_headings?: string[];
+    column_headings: string[];
 };
