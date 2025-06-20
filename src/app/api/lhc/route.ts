@@ -83,7 +83,9 @@ async function ensureExecutableDownloaded(
         // If the file already exists, return early
         console.log(`Checking if file exists: ${localExecutablePath}`);
         await fs.access(localExecutablePath);
-        (await fs.stat(localExecutablePath)).size > 0;
+        if ((await fs.stat(localExecutablePath)).size === 0) {
+            throw new Error("File is empty");
+        }
     } catch {
         // Download and write the file
         console.log(`Downloading executable: ${executableUrl}`);
@@ -240,16 +242,17 @@ export async function POST(req: NextRequest) {
     console.log("Getting LHC Executable: " + lhcExecutableUrl);
 
     const localExecutablePath = path.join(
-        os.tmpdir(), // AppData/Local/Temp
-        LHC_DIRECTORY, // /lhc
-        latestRelease, // 2.1.0
-        LATIN_HYPERCUBE_GENERATOR_EXECUTABLE // lhc.exe
+        os.tmpdir(),
+        LHC_DIRECTORY,
+        latestRelease,
+        LATIN_HYPERCUBE_GENERATOR_EXECUTABLE
     );
     await fs.mkdir(path.dirname(localExecutablePath), { recursive: true });
 
     try {
         await ensureExecutableDownloaded(lhcExecutableUrl, localExecutablePath);
-    } catch (err: any) {
+    } catch (e) {
+        const err = e as Error;
         return NextResponse.json(
             { error: `Download error: ${err.message}` },
             { status: 500 }
@@ -265,7 +268,8 @@ export async function POST(req: NextRequest) {
             {}
         );
 
-        lhcProcess.on("error", (err: any) => {
+        lhcProcess.on("error", (e) => {
+            const err = e as Error;
             console.error(err);
             cleanup();
             resolve(
@@ -298,7 +302,8 @@ export async function POST(req: NextRequest) {
                         version: latestRelease,
                     })
                 );
-            } catch (err: any) {
+            } catch (e) {
+                const err = e as Error;
                 console.error(err);
                 cleanup();
                 resolve(
