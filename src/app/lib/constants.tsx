@@ -13,3 +13,4 @@ export const GITHUB_USERNAME = "Camburgaler";
 
 // LHC Constraints
 export const SMALLEST_INCREMENT: number = 0.00000000001;
+export const LHC_VERSION = "2";
