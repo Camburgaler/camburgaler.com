@@ -125,7 +125,7 @@ async function ensureExecutableDownloaded(
     }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
     console.log("Received request");
     const body: LhcArgs = await req.json();
     console.log(body);
