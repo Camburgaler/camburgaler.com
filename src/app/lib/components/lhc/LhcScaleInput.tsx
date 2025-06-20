@@ -1,3 +1,5 @@
+"use client";
+
 import { ChangeEvent, JSX } from "react";
 import { SMALLEST_INCREMENT } from "../../constants";
 import { LhcArgs, LhcScale } from "../../types/lhcArgs";

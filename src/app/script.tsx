@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import yaml from "js-yaml";
 import { remark } from "remark";
 import html from "remark-html";
 import LanguagesDisplay from "./lib/components/LanguagesDisplay";
@@ -12,6 +13,12 @@ import {
     REPO_NAME_SCOUNDREL,
 } from "./lib/constants";
 import { CombinedMetadata } from "./lib/types/combinedMetadata";
+
+const languageColors: Record<string, { color: string }> = yaml.load(
+    await fetch(
+        "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml"
+    ).then((res) => res.text())
+) as Record<string, { color: string }>;
 
 const APP_NAME_DARK_SOULS_CHAR_SHEET = "Dark Souls TTRPG Character Sheet";
 const APP_NAME_SCOUNDREL = "Scoundrel";
@@ -80,7 +87,10 @@ export function renderRepoElements(
     return (
         <div key={repoName}>
             {renderRepoTitle(repoMetadata, repoName)}
-            <LanguagesDisplay repoLanguages={repoLanguages} />
+            <LanguagesDisplay
+                repoLanguages={repoLanguages}
+                languageColors={languageColors}
+            />
             {renderRepoDescription(repoMetadata)}
         </div>
     );
