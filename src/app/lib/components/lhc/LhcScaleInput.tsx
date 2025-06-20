@@ -15,7 +15,6 @@ export function LhcScaleInput(props: {
     };
     className?: string;
 }): JSX.Element {
-    console.log(props);
     return (
         <span
             className={props.className ?? ""}

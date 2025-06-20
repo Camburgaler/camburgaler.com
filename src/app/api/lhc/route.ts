@@ -82,19 +82,22 @@ async function ensureExecutableDownloaded(
     try {
         // If the file already exists, return early
         console.log(`Checking if file exists: ${localExecutablePath}`);
-        await fs.access(localExecutablePath);
+        await fs.access(localExecutablePath, fs.constants.X_OK);
         if ((await fs.stat(localExecutablePath)).size === 0) {
             throw new Error("File is empty");
         }
     } catch {
         // Download and write the file
+        const ghPat = process.env.GITHUB_PAT;
+        console.log(`Github PAT found: ${typeof ghPat !== "undefined"}`);
+
         console.log(`Downloading executable: ${executableUrl}`);
         const res = await fetch(
             executableUrl,
-            process.env.NEXT_PUBLIC_GITHUB_PAT
+            ghPat
                 ? {
                       headers: {
-                          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_PAT}`,
+                          Authorization: `Bearer ${ghPat}`,
                       },
                   }
                 : {}
@@ -239,7 +242,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // get asset
     const lhcExecutableUrl = `${GITHUB_HOST}/${GITHUB_USERNAME}/${REPO_NAME_LATIN_HYPERCUBE_GENERATOR}${GITHUB_METADATA_RELEASES_PATH}${GITHUB_DOWNLOAD_PATH}/${latestRelease}/${LATIN_HYPERCUBE_GENERATOR_EXECUTABLE}`;
-    console.log("Getting LHC Executable: " + lhcExecutableUrl);
 
     const localExecutablePath = path.join(
         os.tmpdir(),
