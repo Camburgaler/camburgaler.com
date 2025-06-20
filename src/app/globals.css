@@ -1,14 +1,16 @@
 @media (prefers-color-scheme: light) {
     :root {
-        --primary: #d6d9cc;
+        --primary: #d9cccc;
+        --secondary: #d9ead3;
         --font-color: #02120b;
         --font-inverted: #e6d1d4;
-        --link-color: goldenrod;
+        --link-color: rgb(190, 137, 0);
     }
 }
 @media (prefers-color-scheme: dark) {
     :root {
         --primary: #280a0e;
+        --secondary: #274e13;
         --font-color: #e6d1d4;
         --font-inverted: #02120b;
         --link-color: goldenrod;
@@ -66,6 +68,42 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0;
+}
+
+table {
+    border-spacing: 0px;
+    width: 100%;
+    background-color: var(--secondary);
+    border-radius: 0.5rem;
+}
+
+td {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    border-top: 1px solid var(--font-color);
+    text-align: center;
+}
+
+hr {
+    border: 1px solid var(--font-color);
+}
+
+article {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-content: center;
+    text-align: center;
+}
+
+button {
+    color: var(--link-color);
+    background-color: var(--secondary);
+    border-radius: 0.5rem;
+}
+
+input {
+    color: #02120b;
 }
 
 .column {
@@ -207,3 +245,13 @@ footer {
 /* .mb-2 {
     margin-bottom: var(--base-size-8, 8px) !important;
 } */
+
+.table-scale-input {
+    width: 100%;
+}
+
+.table-scale-input input {
+    width: 100%;
+    flex: 1;
+    box-sizing: border-box;
+}

@@ -1,15 +1,10 @@
 "use client";
 
-import yaml from "js-yaml";
 import { useState } from "react";
-const languageColors = yaml.load(
-    await fetch(
-        "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml"
-    ).then((res) => res.text())
-) as Record<string, { color: string }>;
 
 export default function LanguagesDisplay(props: {
     repoLanguages: Record<string, number>;
+    languageColors: Record<string, { color: string }>;
 }) {
     const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null);
 
@@ -29,7 +24,8 @@ export default function LanguagesDisplay(props: {
                                         ).reduce((a, b) => a + b, 0)) *
                                     100
                                 }%`,
-                                backgroundColor: languageColors[lang].color,
+                                backgroundColor:
+                                    props.languageColors[lang].color,
                                 borderRadius: "10px",
                                 height: "100%",
                                 fontSize: "1rem",
@@ -65,7 +61,7 @@ export default function LanguagesDisplay(props: {
         );
     }
 
-    return props.repoLanguages && languageColors
+    return props.repoLanguages && props.languageColors
         ? renderLanguageSpans()
         : `(languages loading...)`;
 }

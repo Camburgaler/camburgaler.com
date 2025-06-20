@@ -1,13 +1,21 @@
 "use client";
 
 import { JSX, useEffect, useState } from "react";
-import { GITHUB_REPOS, GITHUB_USERNAME } from "./lib/constants";
-import { CombinedMetadata } from "./lib/types/combinedMetadata";
 import {
-    renderRepoElements,
-    retrieveGithubRepoLanguages,
-    retrieveMetadata,
-} from "./script";
+    REPO_NAME_DARK_SOULS_CHAR_SHEET,
+    REPO_NAME_HALIGTREE,
+    REPO_NAME_LATIN_HYPERCUBE_GENERATOR,
+    REPO_NAME_SCOUNDREL,
+} from "./lib/constants";
+import { CombinedMetadata } from "./lib/types/combinedMetadata";
+import { fetchLanguages, fetchMetadata, renderRepoElements } from "./script";
+
+const GITHUB_REPOS = [
+    REPO_NAME_DARK_SOULS_CHAR_SHEET,
+    REPO_NAME_SCOUNDREL,
+    REPO_NAME_HALIGTREE,
+    REPO_NAME_LATIN_HYPERCUBE_GENERATOR,
+];
 
 export default function Home() {
     const age = Math.floor(
@@ -39,11 +47,8 @@ export default function Home() {
 
             for (const repo of GITHUB_REPOS) {
                 try {
-                    metadata[repo] = await retrieveMetadata(repo);
-                    languages[repo] = await retrieveGithubRepoLanguages(
-                        GITHUB_USERNAME,
-                        repo
-                    );
+                    metadata[repo] = await fetchMetadata(repo);
+                    languages[repo] = await fetchLanguages(repo);
                 } catch (e) {
                     console.error(`Failed to fetch data for ${repo}:`, e);
                 }
@@ -97,29 +102,6 @@ export default function Home() {
                     </p>
                     <h2>Projects</h2>
                     {repoElements}
-                    <h3>
-                        <a href="https://onlinegdb.com/TJ5TSxoN7">
-                            CLI Latin Hypercube Point Sampler
-                        </a>
-                    </h3>
-                    <p>
-                        An excerpt from the{" "}
-                        <a href="https://en.wikipedia.org/wiki/Latin_hypercube_sampling#cite_note-C3M-1">
-                            Wikipedia article on latin hypercube sampling
-                        </a>
-                        : &quot;Latin hypercube sampling (LHS) is a statistical
-                        method for generating a near-random sample of parameter
-                        values from a multidimensional distribution. The
-                        sampling method is often used to construct computer
-                        experiments or for Monte Carlo integration. &quot; This
-                        project was written during a summer internship that I
-                        did for TechSource, Inc., an LANL-adjacent company in
-                        Los Alamos, New Mexico. I needed to better understand
-                        Monte Carlo integration, and this helped to facilitate
-                        that. I plan to bring this to a more accessible format
-                        at some point.
-                    </p>
-
                     <h3>
                         <a href="https://onlinegdb.com/S1gutYEsv">
                             Message Transfer Protocol
