@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { JSX, useState } from "react";
 import { LhcScaleInput } from "../lib/components/lhc/LhcScaleInput";
+import { LHC_VERSION } from "../lib/constants";
 import { LhcArgs } from "../lib/types/lhcArgs";
 import { LhcResponse } from "../lib/types/lhcResponse";
 import {
@@ -45,13 +46,96 @@ export default function LHC(): JSX.Element {
     );
 
     return (
-        <div>
+        <div style={{ marginBottom: "30px" }}>
             <header className="row center">
                 <h1>Latin Hypercube Generator (version {lhcVersionDisplay})</h1>
             </header>
             <h2>
                 <Link href="/">Home</Link>
             </h2>
+            <p>
+                What this page does is simple. Here is the sequence of events:
+            </p>
+
+            <ol>
+                <li>
+                    The user (that&apos;s you!) configures the running
+                    parameters of the LHC sampling tool via the interface below.
+                </li>
+                <li>The user clicks the &quot;Submit&quot; button.</li>
+                <li>This page sends a request to the LHC API.</li>
+                <li>
+                    The LHC API uses the Github Metadata API to find the latest
+                    version of the v{LHC_VERSION} LHC sampler executable.
+                </li>
+                <li>
+                    The LHC API downloads the LHC sampler executable from
+                    Github.
+                </li>
+                <li>
+                    The LHC API runs the LHC sampler executable, using the
+                    user-supplied parameters.
+                </li>
+                <li>
+                    The LHC sampler writes the output to a temporary CSV file.
+                </li>
+                <li>
+                    The LHC API reads the CSV file and returns it to this page.
+                </li>
+                <li>This page displays the output.</li>
+                <li>
+                    Optionally, the user can then download the output as a CSV
+                    file.
+                </li>
+            </ol>
+
+            <p>
+                This is intended to demonstrate the capabilities of the LHC
+                sampler tool. If you are interested in cutting out the middleman
+                and using the tool for yourself, please feel free to navigate
+                back to the Home page (using the &quot;Home&quot; link above),
+                click the &quot;source&quot; link in the CLI Latin Hypercube
+                Point Sampler heading, and download the latest version of the
+                executable from Github for use on your own machine! The Github
+                repo includes documentation for the arguments that the tool will
+                accept.
+            </p>
+            <p>
+                However, you might be asking yourself: What is the point of this
+                tool? What is a &quot;hypercube&quot;? Why is it latin? All
+                adequate questions.
+            </p>
+            <p>
+                To begin with, consider the following: You are a statistician
+                working at Los Alamos National Laboratory in the New Mexican
+                Jemez mountains in 1979. You&apos;re working on simulated models
+                of mid-air nuclear detonations. You need a way of quickly
+                understanding the general impact of such an event, but it&apos;s
+                difficult to run a large number of simulations when you have to
+                manually tweak the inputs between runs. There are a variety of
+                inputs to tweak. Some examples include: height of detonation
+                above the surface, height of detonation above sea-level, what
+                kind of surface is below the detonation, surface topography,
+                wind speed, wind direction, amount of nuclear material
+                triggering the detonation, and so on. You need a way to generate
+                lots of random, meaningful values for these inputs ahead of time
+                so that you can queue a bunch of simulations, then analyze the
+                results en masse. The solution you devise: a generalization of
+                Latin squares that allows for any number of
+                &quot;dimensions&quot; on the square. Each dimension equates to
+                a parameter of the simulation, and each point of the Latin
+                square equates to a set of values for all of the
+                simulation&apos;s parameters.
+            </p>
+            <p>
+                If that explanation is not clear enough, simply click
+                &quot;Submit&quot; below. This webpage will proceed with the
+                default parameters, and you will see 1000 five-dimensional
+                points sampled. Alternatively, my email is displayed at the
+                bottom of the page. If you have any questions or comments,
+                please reach out to me!
+            </p>
+            <p>- Cameron Chrobocinski</p>
             <hr />
             <main>
                 <section>

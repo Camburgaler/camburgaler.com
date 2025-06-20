@@ -100,6 +100,9 @@ button {
     color: var(--link-color);
     background-color: var(--secondary);
     border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1rem;
 }
 
 input {

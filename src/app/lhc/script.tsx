@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
+import { LHC_VERSION } from "../lib/constants";
 import { LhcArgs, LhcScale } from "../lib/types/lhcArgs";
 import { LhcResponse } from "../lib/types/lhcResponse";
 
 const DEFAULT_DIMENSION_PREFIX = "dim";
-const LHC_VERSION = "2";
 
 export function updateNumber(
     setArgs: Dispatch<SetStateAction<LhcArgs>>,
