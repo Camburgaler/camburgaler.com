@@ -6,49 +6,41 @@ import html from "remark-html";
 import LanguagesDisplay from "./lib/components/LanguagesDisplay";
 import MarkdownRenderer from "./lib/components/MarkdownRenderer";
 import {
-    GITHUB_METADATA_HOST,
-    GITHUB_METADATA_LANGUAGES_PATH,
-    GITHUB_METADATA_REPOS_PATH,
-    REPO_NAME_TO_APP_NAME,
+    REPO_NAME_DARK_SOULS_CHAR_SHEET,
+    REPO_NAME_HALIGTREE,
+    REPO_NAME_LATIN_HYPERCUBE_GENERATOR,
+    REPO_NAME_SCOUNDREL,
 } from "./lib/constants";
 import { CombinedMetadata } from "./lib/types/combinedMetadata";
+
+const APP_NAME_DARK_SOULS_CHAR_SHEET = "Dark Souls TTRPG Character Sheet";
+const APP_NAME_SCOUNDREL = "Scoundrel";
+const APP_NAME_HALIGTREE = "Haligtree";
+const APP_NAME_LATIN_HYPERCUBE_GENERATOR = "CLI Latin Hypercube Point Sampler";
+const REPO_NAME_TO_APP_NAME: Map<string, string> = new Map([
+    [REPO_NAME_DARK_SOULS_CHAR_SHEET, APP_NAME_DARK_SOULS_CHAR_SHEET],
+    [REPO_NAME_SCOUNDREL, APP_NAME_SCOUNDREL],
+    [REPO_NAME_HALIGTREE, APP_NAME_HALIGTREE],
+    [REPO_NAME_LATIN_HYPERCUBE_GENERATOR, APP_NAME_LATIN_HYPERCUBE_GENERATOR],
+]);
 
 export async function markdownToHtml(markdown: string) {
     const result = await remark().use(html).process(markdown);
     return result;
 }
 
-async function fetchGithubMetadata<T>(url: string): Promise<T> {
-    const res = await fetch(
-        `${GITHUB_METADATA_HOST}${url}`,
-        process.env.NEXT_PUBLIC_GITHUB_PAT
-            ? {
-                  headers: {
-                      Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_PAT}`,
-                  },
-              }
-            : {}
-    );
+export async function fetchMetadata(repo: string): Promise<CombinedMetadata> {
+    const res = await fetch(`/api/${repo}/metadata`);
     return res.json();
 }
 
-async function fetchMetadata(repo: string): Promise<CombinedMetadata> {
-    const res = await fetch(`/api/metadata?repo=${repo}`);
-    return res.json();
-}
-
-export function retrieveMetadata(repo: string): Promise<CombinedMetadata> {
-    return fetchMetadata(repo);
-}
-
-export function retrieveGithubRepoLanguages(
-    user: string,
+export async function fetchLanguages(
     repo: string
 ): Promise<Record<string, number>> {
-    return fetchGithubMetadata<Record<string, number>>(
-        `${GITHUB_METADATA_REPOS_PATH}/${user}/${repo}${GITHUB_METADATA_LANGUAGES_PATH}`
-    );
+    const res = await fetch(`/api/${repo}/languages`);
+    return res.json();
 }
+
 function getAppName(metadata: CombinedMetadata, repoName: string) {
     return metadata.app_name ?? REPO_NAME_TO_APP_NAME.get(repoName);
 }

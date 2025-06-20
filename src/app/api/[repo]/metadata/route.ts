@@ -2,23 +2,22 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import {
-    GITHUB_DEFAULT_BRANCH,
     GITHUB_METADATA_HOST,
     GITHUB_METADATA_REPOS_PATH,
-    GITHUB_RAW_HOST,
     GITHUB_USERNAME,
-    METADATA_FILE_PATH,
 } from "@/app/lib/constants";
 import { CombinedMetadata } from "@/app/lib/types/combinedMetadata";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
-    const repo = req.nextUrl.searchParams.get("repo");
-    if (!repo)
-        return NextResponse.json(
-            { error: "Missing repo name" },
-            { status: 400 }
-        );
+const GITHUB_RAW_HOST = "https://raw.githubusercontent.com";
+const METADATA_FILE_PATH = "metadata.json";
+const GITHUB_DEFAULT_BRANCH = "master";
+
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ repo: string }> }
+) {
+    const { repo } = await params;
 
     const githubMetadataUrl = `${GITHUB_METADATA_HOST}${GITHUB_METADATA_REPOS_PATH}/${GITHUB_USERNAME}/${repo}`;
     const customMetadataUrl = `${GITHUB_RAW_HOST}/${GITHUB_USERNAME}/${repo}/${GITHUB_DEFAULT_BRANCH}/${METADATA_FILE_PATH}`;
