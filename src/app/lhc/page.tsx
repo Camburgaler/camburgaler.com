@@ -59,10 +59,10 @@ export default function LHC(): JSX.Element {
 
             <ol>
                 <li>
-                    The user (that's you!) configures the running parameters of
-                    the LHC sampling tool via the interface below.
+                    The user (that&apos;s you!) configures the running
+                    parameters of the LHC sampling tool via the interface below.
                 </li>
-                <li>The user clicks the "Submit" button.</li>
+                <li>The user clicks the &quot;Submit&quot; button.</li>
                 <li>This page sends a request to the LHC API.</li>
                 <li>
                     The LHC API uses the Github Metadata API to find the latest
@@ -93,23 +93,24 @@ export default function LHC(): JSX.Element {
                 This is intended to demonstrate the capabilities of the LHC
                 sampler tool. If you are interested in cutting out the middleman
                 and using the tool for yourself, please feel free to navigate
-                back to the Home page (using the "Home" link above), click the
-                "source" link in the CLI Latin Hypercube Point Sampler heading,
-                and download the latest version of the executable from Github
-                for use on your own machine! The Github repo includes
-                documentation for the arguments that the tool will accept.
+                back to the Home page (using the &quot;Home&quot; link above),
+                click the &quot;source&quot; link in the CLI Latin Hypercube
+                Point Sampler heading, and download the latest version of the
+                executable from Github for use on your own machine! The Github
+                repo includes documentation for the arguments that the tool will
+                accept.
             </p>
             <p>
                 However, you might be asking yourself: What is the point of this
-                tool? What is a "hypercube"? Why is it latin? All adequate
-                questions.
+                tool? What is a &quot;hypercube&quot;? Why is it latin? All
+                adequate questions.
             </p>
             <p>
                 To begin with, consider the following: You are a statistician
                 working at Los Alamos National Laboratory in the New Mexican
-                Jemez mountains in 1979. You're working on simulated models of
-                mid-air nuclear detonations. You need a way of quickly
-                understanding the general impact of such an event, but it's
+                Jemez mountains in 1979. You&apos;re working on simulated models
+                of mid-air nuclear detonations. You need a way of quickly
+                understanding the general impact of such an event, but it&apos;s
                 difficult to run a large number of simulations when you have to
                 manually tweak the inputs between runs. There are a variety of
                 inputs to tweak. Some examples include: height of detonation
@@ -120,17 +121,19 @@ export default function LHC(): JSX.Element {
                 lots of random, meaningful values for these inputs ahead of time
                 so that you can queue a bunch of simulations, then analyze the
                 results en masse. The solution you devise: a generalization of
-                Latin squares that allows for any number of "dimensions" on the
-                square. Each dimension equates to a parameter of the simulation,
-                and each point of the Latin square equates to a set of values
-                for all of the simulation's parameters.
+                Latin squares that allows for any number of
+                &quot;dimensions&quot; on the square. Each dimension equates to
+                a parameter of the simulation, and each point of the Latin
+                square equates to a set of values for all of the
+                simulation&apos;s parameters.
             </p>
             <p>
-                If that explanation is not clear enough, simply click "Submit"
-                below. This webpage will proceed with the default parameters,
-                and you will see 1000 five-dimensional points sampled.
-                Alternatively, my email is displayed at the bottom of the page.
-                If you have any questions or comments, please reach out to me!
+                If that explanation is not clear enough, simply click
+                &quot;Submit&quot; below. This webpage will proceed with the
+                default parameters, and you will see 1000 five-dimensional
+                points sampled. Alternatively, my email is displayed at the
+                bottom of the page. If you have any questions or comments,
+                please reach out to me!
             </p>
             <p>- Cameron Chrobocinski</p>
             <hr />
