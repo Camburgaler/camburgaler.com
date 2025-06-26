@@ -1,8 +1,8 @@
 "use client";
 
+import { LhcArgs, LhcScale } from "@camburgaler/latin-hypercube-shared";
 import { ChangeEvent, JSX } from "react";
 import { SMALLEST_INCREMENT } from "../../constants";
-import { LhcArgs, LhcScale } from "../../types/lhcArgs";
 
 export function LhcScaleInput(props: {
     name: string;
@@ -15,7 +15,6 @@ export function LhcScaleInput(props: {
     };
     className?: string;
 }): JSX.Element {
-    console.log(props);
     return (
         <span
             className={props.className ?? ""}

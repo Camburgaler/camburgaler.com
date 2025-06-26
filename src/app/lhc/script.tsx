@@ -1,9 +1,10 @@
+import { LhcArgs, LhcScale } from "@camburgaler/latin-hypercube-shared";
 import { Dispatch, SetStateAction } from "react";
 import { LHC_VERSION } from "../lib/constants";
-import { LhcArgs, LhcScale } from "../lib/types/lhcArgs";
 import { LhcResponse } from "../lib/types/lhcResponse";
 
 const DEFAULT_DIMENSION_PREFIX = "dim";
+const LHC_API_URL = "https://latin-hypercube-api.onrender.com";
 
 export function updateNumber(
     setArgs: Dispatch<SetStateAction<LhcArgs>>,
@@ -164,7 +165,7 @@ export function toggleRandom(
 }
 
 export async function fetchLhcJson(args: LhcArgs): Promise<LhcResponse> {
-    const rawCsv = await fetch("api/lhc", {
+    const rawCsv = await fetch(LHC_API_URL, {
         method: "POST",
         body: JSON.stringify(args),
     });
