@@ -1,9 +1,6 @@
 "use client";
 
-import {
-    LhcArgs,
-    LhcScale,
-} from "@camburgaler/latin-hypercube-shared/dist/types";
+import { LhcArgs, LhcScale } from "@camburgaler/latin-hypercube-shared";
 import { ChangeEvent, JSX } from "react";
 import { SMALLEST_INCREMENT } from "../../constants";
 
