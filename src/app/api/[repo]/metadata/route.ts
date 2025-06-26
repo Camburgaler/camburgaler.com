@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import { CombinedMetadata } from "@/app/lib/types/combinedMetadata";
 import {
     GITHUB_METADATA_HOST,
     GITHUB_METADATA_REPOS_PATH,
     GITHUB_USERNAME,
-} from "@/app/lib/constants";
-import { CombinedMetadata } from "@/app/lib/types/combinedMetadata";
+} from "@camburgaler/latin-hypercube-shared";
 import { NextRequest, NextResponse } from "next/server";
 
 const GITHUB_RAW_HOST = "https://raw.githubusercontent.com";

@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import { REPO_NAME_LATIN_HYPERCUBE_GENERATOR } from "@camburgaler/latin-hypercube-shared";
 import yaml from "js-yaml";
 import { remark } from "remark";
 import html from "remark-html";
@@ -9,7 +10,6 @@ import MarkdownRenderer from "./lib/components/MarkdownRenderer";
 import {
     REPO_NAME_DARK_SOULS_CHAR_SHEET,
     REPO_NAME_HALIGTREE,
-    REPO_NAME_LATIN_HYPERCUBE_GENERATOR,
     REPO_NAME_SCOUNDREL,
 } from "./lib/constants";
 import { CombinedMetadata } from "./lib/types/combinedMetadata";

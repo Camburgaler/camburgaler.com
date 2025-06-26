@@ -1,10 +1,10 @@
 "use client";
 
+import { LhcArgs } from "@camburgaler/latin-hypercube-shared";
 import Link from "next/link";
 import { JSX, useState } from "react";
 import { LhcScaleInput } from "../lib/components/lhc/LhcScaleInput";
 import { LHC_VERSION } from "../lib/constants";
-import { LhcArgs } from "../lib/types/lhcArgs";
 import { LhcResponse } from "../lib/types/lhcResponse";
 import {
     displayVersion,
@@ -44,6 +44,7 @@ export default function LHC(): JSX.Element {
     const [lhcVersionDisplay, setLhcVersionDisplay] = useState<string>(
         displayVersion()
     );
+    const [reqSubmitted, setReqSubmitted] = useState<boolean>(false);
 
     return (
         <div style={{ marginBottom: "30px" }}>
@@ -394,13 +395,15 @@ export default function LHC(): JSX.Element {
                     <button
                         type="submit"
                         onClick={() => {
+                            setReqSubmitted(true);
                             fetchLhcJson(args).then((data: LhcResponse) => {
                                 setLhcOutput(
                                     data.csv
-                                        .split("\r\n")
+                                        .split("\n")
                                         .map((x: string) => x.split(","))
                                 );
                                 setLhcVersionDisplay(data.version);
+                                setReqSubmitted(false);
                             });
                         }}
                     >
@@ -429,6 +432,9 @@ export default function LHC(): JSX.Element {
                     )}
                 </section>
                 <section>
+                    {reqSubmitted && (
+                        <p>Request submitted. Awaiting Response...</p>
+                    )}
                     {lhcOutput.length > 1 && (
                         <table>
                             <tbody>

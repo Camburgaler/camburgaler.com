@@ -5,7 +5,7 @@ import {
     GITHUB_METADATA_HOST,
     GITHUB_METADATA_REPOS_PATH,
     GITHUB_USERNAME,
-} from "@/app/lib/constants";
+} from "@camburgaler/latin-hypercube-shared";
 import { NextRequest, NextResponse } from "next/server";
 
 const GITHUB_METADATA_LANGUAGES_PATH = "/languages";

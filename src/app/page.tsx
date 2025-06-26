@@ -1,10 +1,10 @@
 "use client";
 
+import { REPO_NAME_LATIN_HYPERCUBE_GENERATOR } from "@camburgaler/latin-hypercube-shared";
 import { JSX, useEffect, useState } from "react";
 import {
     REPO_NAME_DARK_SOULS_CHAR_SHEET,
     REPO_NAME_HALIGTREE,
-    REPO_NAME_LATIN_HYPERCUBE_GENERATOR,
     REPO_NAME_SCOUNDREL,
 } from "./lib/constants";
 import { CombinedMetadata } from "./lib/types/combinedMetadata";
