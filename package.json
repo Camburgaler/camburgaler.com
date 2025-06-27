@@ -9,7 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@camburgaler/latin-hypercube-shared": "^1.0.1",
+        "@camburgaler/latin-hypercube-shared": "^2.0.0",
         "dotenv": "^16.5.0",
         "js-yaml": "^4.1.0",
         "linguist-languages": "^7.30.0",

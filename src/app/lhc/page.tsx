@@ -1,10 +1,9 @@
 "use client";
 
-import { LhcArgs } from "@camburgaler/latin-hypercube-shared";
+import { LHC_VERSION, LhcArgs } from "@camburgaler/latin-hypercube-shared";
 import Link from "next/link";
 import { JSX, useState } from "react";
 import { LhcScaleInput } from "../lib/components/lhc/LhcScaleInput";
-import { LHC_VERSION } from "../lib/constants";
 import { LhcResponse } from "../lib/types/lhcResponse";
 import {
     displayVersion,
