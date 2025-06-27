@@ -1,6 +1,9 @@
-import { LhcArgs, LhcScale } from "@camburgaler/latin-hypercube-shared";
+import {
+    LHC_VERSION,
+    LhcArgs,
+    LhcScale,
+} from "@camburgaler/latin-hypercube-shared";
 import { Dispatch, SetStateAction } from "react";
-import { LHC_VERSION } from "../lib/constants";
 import { LhcResponse } from "../lib/types/lhcResponse";
 
 const DEFAULT_DIMENSION_PREFIX = "dim";
