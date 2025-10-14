@@ -21,7 +21,7 @@
         "remark-html": "^16.0.1",
         "remark-parse": "^11.0.0",
         "remark-rehype": "^11.1.2",
-        "tmp": "^0.2.3",
+        "tmp": "^0.2.5",
         "tmp-promise": "^3.0.3",
         "unified": "^11.0.5"
     },
