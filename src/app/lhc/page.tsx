@@ -4,6 +4,7 @@ import { LHC_VERSION, LhcArgs } from "@camburgaler/latin-hypercube-shared";
 import Link from "next/link";
 import { JSX, useState } from "react";
 import { LhcScaleInput } from "../lib/components/lhc/LhcScaleInput";
+import { VirtualizedResults } from "../lib/components/lhc/VirtualizedResults";
 import { LhcResponse } from "../lib/types/lhcResponse";
 import {
     displayVersion,
@@ -238,7 +239,7 @@ export default function LHC(): JSX.Element {
                         </div>
                     </article>
                     <article>
-                        <table>
+                        <table style={{ borderRadius: "0.5rem" }}>
                             <tbody>
                                 <tr>
                                     <th>
@@ -435,21 +436,7 @@ export default function LHC(): JSX.Element {
                         <p>Request submitted. Awaiting Response...</p>
                     )}
                     {lhcOutput.length > 1 && (
-                        <table>
-                            <tbody>
-                                {lhcOutput.map((row, i) => (
-                                    <tr key={i}>
-                                        {row.map((cell, j) =>
-                                            i === 0 ? (
-                                                <th key={j}>{cell}</th>
-                                            ) : (
-                                                <td key={j}>{cell}</td>
-                                            )
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <VirtualizedResults rows={lhcOutput} />
                     )}
                 </section>
             </main>
