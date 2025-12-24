@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { DEFAULT_LANGUAGE_COLOR } from "../constants";
 
 export default function LanguagesDisplay(props: {
     repoLanguages: Record<string, number>;
-    languageColors: Record<string, { color: string }>;
+    languageColors: Record<string, string>;
 }) {
     const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null);
 
@@ -25,7 +26,8 @@ export default function LanguagesDisplay(props: {
                                     100
                                 }%`,
                                 backgroundColor:
-                                    props.languageColors[lang].color,
+                                    props.languageColors[lang] ||
+                                    DEFAULT_LANGUAGE_COLOR,
                                 borderRadius: "10px",
                                 height: "100%",
                                 fontSize: "1rem",
@@ -61,7 +63,7 @@ export default function LanguagesDisplay(props: {
         );
     }
 
-    return props.repoLanguages && props.languageColors
+    return props.repoLanguages
         ? renderLanguageSpans()
         : `(languages loading...)`;
 }
