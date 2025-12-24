@@ -20,10 +20,10 @@ export async function GET(
 
     const githubLanguagesRes = await fetch(
         githubLanguagesUrl,
-        process.env.NEXT_PUBLIC_GITHUB_PAT
+        process.env.GITHUB_PAT
             ? {
                   headers: {
-                      Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_PAT}`,
+                      Authorization: `Bearer ${process.env.GITHUB_PAT}`,
                   },
               }
             : {}

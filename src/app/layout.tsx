@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Footer } from "./lib/components/Footer";
 
 export const metadata: Metadata = {
     title: "Cameron Chrobocinski",
@@ -24,7 +23,6 @@ export default function RootLayout({
                 style={{ padding: "2%", gap: "15px" }}
             >
                 {children}
-                <Footer />
             </body>
         </html>
     );

@@ -1,14 +1,19 @@
 "use client";
 
 import { REPO_NAME_LATIN_HYPERCUBE_GENERATOR } from "@camburgaler/latin-hypercube-shared";
-import { JSX, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     REPO_NAME_DARK_SOULS_CHAR_SHEET,
     REPO_NAME_HALIGTREE,
     REPO_NAME_SCOUNDREL,
 } from "./lib/constants";
-import { CombinedMetadata } from "./lib/types/combinedMetadata";
-import { fetchLanguages, fetchMetadata, renderRepoElements } from "./script";
+import { GithubMetadata } from "./lib/types/githubMetadata";
+import {
+    fetchLanguageColors,
+    fetchLanguages,
+    fetchMetadata,
+    renderRepoElements,
+} from "./script";
 
 const GITHUB_REPOS = [
     REPO_NAME_DARK_SOULS_CHAR_SHEET,
@@ -27,23 +32,29 @@ export default function Home() {
                 24 /
                 365
     );
-    const [metadata, setMetadata] = useState<Record<string, CombinedMetadata>>(
+    const [metadata, setMetadata] = useState<Record<string, GithubMetadata>>(
         {}
     );
     const [repoLanguages, setRepoLanguages] = useState<
         Record<string, Record<string, number>>
     >({});
-    const [repoElements, setRepoElements] = useState<JSX.Element[]>(
-        GITHUB_REPOS.map((repo) =>
-            renderRepoElements(repo, metadata[repo], repoLanguages[repo])
-        )
-    );
+    const [languageColors, setLanguageColors] = useState<
+        Record<string, string>
+    >({});
+
+    useEffect(() => {
+        async function get() {
+            const data = await fetchLanguageColors();
+            setLanguageColors(data);
+        }
+
+        get();
+    }, []);
 
     useEffect(() => {
         async function fetchGithubData() {
-            const metadata: Record<string, CombinedMetadata> = {};
+            const metadata: Record<string, GithubMetadata> = {};
             const languages: Record<string, Record<string, number>> = {};
-            const repoElements: JSX.Element[] = [];
 
             for (const repo of GITHUB_REPOS) {
                 try {
@@ -52,24 +63,10 @@ export default function Home() {
                 } catch (e) {
                     console.error(`Failed to fetch data for ${repo}:`, e);
                 }
-
-                repoElements.push(
-                    renderRepoElements(repo, metadata[repo], languages[repo])
-                );
             }
 
             setMetadata(metadata);
             setRepoLanguages(languages);
-            setRepoElements(
-                repoElements.sort((a, b) => {
-                    const aMeta = metadata[a.key as string];
-                    const bMeta = metadata[b.key as string];
-                    return (
-                        new Date(bMeta.updated_at).getTime() -
-                        new Date(aMeta.updated_at).getTime()
-                    );
-                })
-            );
         }
 
         fetchGithubData();
@@ -100,8 +97,32 @@ export default function Home() {
                         best through examples and hands-on experience. If
                         you&apos;d like to chat, please email me.
                     </p>
+                    <span
+                        style={{
+                            justifyContent: "center",
+                            display: "flex",
+                        }}
+                    >
+                        <a href="mailto:cameronchrobo@gmail.com">
+                            cameronchrobo@gmail.com
+                        </a>
+                    </span>
                     <h2>Projects</h2>
-                    {repoElements}
+                    {GITHUB_REPOS.map((repo) =>
+                        renderRepoElements(
+                            repo,
+                            metadata[repo],
+                            repoLanguages[repo],
+                            languageColors
+                        )
+                    ).sort((a, b) => {
+                        const aMeta = metadata[a.key as string] ?? {};
+                        const bMeta = metadata[b.key as string] ?? {};
+                        return (
+                            new Date(bMeta?.updated_at).getTime() -
+                            new Date(aMeta?.updated_at).getTime()
+                        );
+                    })}
                     <h3>
                         <a href="https://onlinegdb.com/S1gutYEsv">
                             Message Transfer Protocol

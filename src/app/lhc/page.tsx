@@ -439,6 +439,16 @@ export default function LHC(): JSX.Element {
                         <VirtualizedResults rows={lhcOutput} />
                     )}
                 </section>
+                <span
+                    style={{
+                        justifyContent: "center",
+                        display: "flex",
+                    }}
+                >
+                    <a href="mailto:cameronchrobo@gmail.com">
+                        cameronchrobo@gmail.com
+                    </a>
+                </span>
             </main>
         </div>
     );
