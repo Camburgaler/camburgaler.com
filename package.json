@@ -12,7 +12,7 @@
     "dependencies": {
         "@camburgaler/latin-hypercube-shared": "^3",
         "@tanstack/react-virtual": "^3",
-        "dotenv": "^17",
+        "dotenv": "^16",
         "js-yaml": "^4",
         "next": "16",
         "react": "^19",
