@@ -3,7 +3,7 @@
     "version": "3.3.0",
     "private": true,
     "scripts": {
-        "upgrade": "rm -rf node_modules pckage-lock.json && npm install",
+        "upgrade": "rm -rf node_modules package-lock.json && npm install",
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next build && next start",

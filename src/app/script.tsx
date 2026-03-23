@@ -8,6 +8,7 @@ import {
     REPO_NAME_DARK_SOULS_CHAR_SHEET,
     REPO_NAME_HALIGTREE,
     REPO_NAME_SCOUNDREL,
+    REPO_NAME_UNKLAIM,
 } from "./lib/constants";
 import { GithubMetadata } from "./lib/types/githubMetadata";
 
@@ -15,6 +16,7 @@ const APP_NAME_DARK_SOULS_CHAR_SHEET = "Dark Souls TTRPG Character Sheet";
 const APP_NAME_SCOUNDREL = "Scoundrel";
 const APP_NAME_HALIGTREE = "Haligtree";
 const APP_NAME_LATIN_HYPERCUBE_GENERATOR = "CLI Latin Hypercube Point Sampler";
+const APP_NAME_UNKLAIM = "UNꓘLAIM Official Website";
 
 const DESCRIPTION_DARK_SOULS_CHAR_SHEET = (
     <p>
@@ -74,12 +76,22 @@ const DESCRIPTION_LATIN_HYPERCUBE_GENERATOR = (
         output.
     </p>
 );
+const DESCRIPTION_UNKLAIM = (
+    <p>
+        This is the official website for the nu-metal band UNꓘLAIM. It was
+        written in TypeScript. The website dynamically loads media from a
+        CloudFlare R2 bucket and is formatted for use on desktop or mobile. This
+        website is updated frequently, as the band is growing and evolving their
+        identity all the time.
+    </p>
+);
 
 const REPO_NAME_TO_APP_NAME: Map<string, string> = new Map([
     [REPO_NAME_DARK_SOULS_CHAR_SHEET, APP_NAME_DARK_SOULS_CHAR_SHEET],
     [REPO_NAME_SCOUNDREL, APP_NAME_SCOUNDREL],
     [REPO_NAME_HALIGTREE, APP_NAME_HALIGTREE],
     [REPO_NAME_LATIN_HYPERCUBE_GENERATOR, APP_NAME_LATIN_HYPERCUBE_GENERATOR],
+    [REPO_NAME_UNKLAIM, APP_NAME_UNKLAIM],
 ]);
 const REPO_NAME_TO_DESCRIPTION: Map<string, JSX.Element> = new Map([
     [REPO_NAME_DARK_SOULS_CHAR_SHEET, DESCRIPTION_DARK_SOULS_CHAR_SHEET],
@@ -89,6 +101,7 @@ const REPO_NAME_TO_DESCRIPTION: Map<string, JSX.Element> = new Map([
         REPO_NAME_LATIN_HYPERCUBE_GENERATOR,
         DESCRIPTION_LATIN_HYPERCUBE_GENERATOR,
     ],
+    [REPO_NAME_UNKLAIM, DESCRIPTION_UNKLAIM],
 ]);
 
 export async function fetchLanguageColors(): Promise<Record<string, string>> {
@@ -102,7 +115,7 @@ export async function fetchMetadata(repo: string): Promise<GithubMetadata> {
 }
 
 export async function fetchLanguages(
-    repo: string
+    repo: string,
 ): Promise<Record<string, number>> {
     const res = await fetch(`/api/${repo}/languages`);
     return res.json();
@@ -120,7 +133,13 @@ function renderRepoTitle(repoMetadata: GithubMetadata, repoName: string) {
             ) : (
                 getAppName(repoName) + " (WIP)"
             )}{" "}
-            (<a href={repoMetadata.html_url}>source</a>)
+            (
+            {repoMetadata.private ? (
+                "source is private 🔒"
+            ) : (
+                <a href={repoMetadata.html_url}>source</a>
+            )}
+            )
         </h3>
     ) : (
         <h3 key={repoName}>{getAppName(repoName)} (loading...)</h3>
@@ -139,7 +158,7 @@ export function renderRepoElements(
     repoName: string,
     repoMetadata: GithubMetadata,
     repoLanguages: Record<string, number>,
-    languageColors: Record<string, string>
+    languageColors: Record<string, string>,
 ) {
     return (
         <div key={repoName}>

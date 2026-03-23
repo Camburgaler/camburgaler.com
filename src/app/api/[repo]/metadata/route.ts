@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: Promise<{ repo: string }> }
+    { params }: { params: Promise<{ repo: string }> },
 ): Promise<NextResponse<GithubMetadata>> {
     const { repo } = await params;
 
@@ -25,7 +25,7 @@ export async function GET(
                       Authorization: `Bearer ${process.env.GITHUB_PAT}`,
                   },
               }
-            : {}
+            : {},
     );
 
     const data: GithubMetadata = {

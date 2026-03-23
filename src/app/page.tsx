@@ -6,6 +6,7 @@ import {
     REPO_NAME_DARK_SOULS_CHAR_SHEET,
     REPO_NAME_HALIGTREE,
     REPO_NAME_SCOUNDREL,
+    REPO_NAME_UNKLAIM,
 } from "./lib/constants";
 import { GithubMetadata } from "./lib/types/githubMetadata";
 import {
@@ -20,6 +21,7 @@ const GITHUB_REPOS = [
     REPO_NAME_SCOUNDREL,
     REPO_NAME_HALIGTREE,
     REPO_NAME_LATIN_HYPERCUBE_GENERATOR,
+    REPO_NAME_UNKLAIM,
 ];
 
 export default function Home() {
@@ -30,10 +32,10 @@ export default function Home() {
                 60 /
                 60 /
                 24 /
-                365
+                365,
     );
     const [metadata, setMetadata] = useState<Record<string, GithubMetadata>>(
-        {}
+        {},
     );
     const [repoLanguages, setRepoLanguages] = useState<
         Record<string, Record<string, number>>
@@ -88,13 +90,13 @@ export default function Home() {
                         software engineer at USAA. I grew up in Corpus Christi,
                         Texas and graduated from Texas A&M University - Corpus
                         Christi with a Bachelor of Science in Computer Science.
-                        I currently live in Bryan, Texas. I am {age} years old.
-                        My wife, Mary, and my daughters, Amelia and Briar, are
-                        my inspiration. My corgi, Gidget, has kept me company
-                        since 2019. In my scant free time, I work on personal
-                        coding projects, play video games, and play Tabletop
-                        Roleplaying Games (e.g. Dungeons & Dragons). I learn
-                        best through examples and hands-on experience. If
+                        I currently live in Bryan, Texas. I am {age + " "}years
+                        old. My wife, Mary, and my daughters, Amelia and Briar,
+                        are my inspiration. My corgi, Gidget, has kept me
+                        company since 2019. In my scant free time, I work on
+                        personal coding projects, play video games, and play
+                        Tabletop Roleplaying Games (e.g. Dungeons & Dragons). I
+                        learn best through examples and hands-on experience. If
                         you&apos;d like to chat, please email me.
                     </p>
                     <span
@@ -113,8 +115,8 @@ export default function Home() {
                             repo,
                             metadata[repo],
                             repoLanguages[repo],
-                            languageColors
-                        )
+                            languageColors,
+                        ),
                     ).sort((a, b) => {
                         const aMeta = metadata[a.key as string] ?? {};
                         const bMeta = metadata[b.key as string] ?? {};
