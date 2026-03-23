@@ -6,4 +6,5 @@ export type GithubMetadata = {
     updated_at: string;
     homepage: string;
     size: number;
+    private: boolean;
 };
